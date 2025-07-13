@@ -1,171 +1,124 @@
 <!DOCTYPE html>
-<!-- saved from url=(0029)https://fallbrix.netlify.app/ -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Falling Bricks - Survival Game</title>
-    <meta name="description" content="A challenging 2D survival game where you dodge falling bricks">
-    <meta name="theme-color" content="#3B82F6">
-    
-    <!-- PWA meta tags -->
-    <link rel="manifest" href="https://fallbrix.netlify.app/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Falling Bricks">
-    <link rel="apple-touch-icon" sizes="192x192" href="https://fallbrix.netlify.app/icon-192x192.png">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzNCODJGNiIvPgo8cmVjdCB4PSIxMiIgeT0iMjYiIHdpZHRoPSI4IiBoZWlnaHQ9IjQiIHJ4PSIxIiBmaWxsPSIjRkZGRkZGIi8+CjxyZWN0IHg9IjgiIHk9IjE4IiB3aWR0aD0iNiIgaGVpZ2h0PSI0IiByeD0iMSIgZmlsbD0iI0VGNDQzNCIvPgo8cmVjdCB4PSIxOCIgeT0iMTAiIHdpZHRoPSI2IiBoZWlnaHQ9IjQiIHJ4PSIxIiBmaWxsPSIjRjk3MzE2Ii8+CjxyZWN0IHg9IjEwIiB5PSI2IiB3aWR0aD0iNiIgaGVpZ2h0PSI0IiByeD0iMSIgZmlsbD0iI0VBQjMwOCIvPgo8L3N2Zz4K">
-    
-    <link rel="stylesheet" href="styles.css">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Falling Bricks - Survival Game</title>
+  <meta name="description" content="A challenging 2D survival game where you dodge falling bricks" />
+  <meta name="theme-color" content="#3B82F6" />
+
+  <!-- PWA Meta -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Falling Bricks" />
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192x192.png" />
+  <link rel="icon" type="image/png" href="icon-192x192.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div id="app">
-        <!-- Game Container -->
-        <div id="gameContainer" class="game-container">
-            <!-- Game Header -->
-            <header class="game-header">
-                <h1 class="game-title">Falling Bricks</h1>
-                <div class="score-container">
-                    <div class="score-item">
-                        <span class="score-label">Score:</span>
-                        <span id="currentScore" class="score-value">63</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label">Best:</span>
-                        <span id="highScore" class="score-value">63</span>
-                    </div>
-                </div>
-            </header>
+  <div id="app">
+    <div id="gameContainer" class="game-container">
+      <header class="game-header">
+        <h1 class="game-title">Falling Bricks</h1>
+        <div class="score-container">
+          <div class="score-item">
+            <span class="score-label">Score:</span>
+            <span id="currentScore" class="score-value">0</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Best:</span>
+            <span id="highScore" class="score-value">0</span>
+          </div>
+        </div>
+      </header>
 
-            <!-- Game Canvas -->
-            <div class="canvas-container">
-                <canvas id="gameCanvas" width="400" height="600"></canvas>
-                
-                <!-- Game Over Overlay -->
-                <div id="gameOverlay" class="game-overlay">
-                    <div class="overlay-content">
-                        <h2 id="overlayTitle" class="overlay-title">Game Over!</h2>
-                        <p id="overlayMessage" class="overlay-message">You survived for <span id="finalScore">63</span> seconds!</p>
-                        <div class="overlay-buttons">
-                            <button id="startBtn" class="btn btn-primary hidden">Start Game</button>
-                            <button id="restartBtn" class="btn btn-secondary">Restart</button>
-                        </div>
-                    </div>
-                </div>
+      <div class="canvas-container">
+        <canvas id="gameCanvas" width="360" height="640"></canvas>
 
-                <!-- Pause Overlay -->
-                <div id="pauseOverlay" class="game-overlay hidden">
-                    <div class="overlay-content">
-                        <h2 class="overlay-title">Paused</h2>
-                        <p class="overlay-message">Press SPACE to resume</p>
-                        <button id="resumeBtn" class="btn btn-primary">Resume</button>
-                    </div>
-                </div>
+        <div id="gameOverlay" class="game-overlay">
+          <div class="overlay-content">
+            <h2 id="overlayTitle" class="overlay-title">Falling Bricks</h2>
+            <p id="overlayMessage" class="overlay-message">
+              Dodge the falling bricks and survive as long as possible!
+            </p>
+            <div class="overlay-buttons">
+              <button id="startBtn" class="btn btn-primary">Start Game</button>
+              <button id="restartBtn" class="btn btn-secondary hidden">Restart</button>
             </div>
-
-            <!-- Game Controls -->
-            <div class="game-controls">
-                <div class="controls-info">
-                    <p><strong>Desktop:</strong> Arrow keys to move, SPACE to pause</p>
-                    <p><strong>Mobile:</strong> Touch controls below</p>
-                </div>
-                
-                <!-- Mobile Controls -->
-                <div class="mobile-controls">
-                    <button id="leftBtn" class="control-btn">⬅️</button>
-                    <button id="pauseBtn" class="control-btn">⏸️</button>
-                    <button id="rightBtn" class="control-btn">➡️</button>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <!-- Install Button -->
-        <div id="installContainer" class="install-container hidden">
-            <button id="installBtn" class="btn btn-install">📱 Install App</button>
+        <div id="pauseOverlay" class="game-overlay hidden">
+          <div class="overlay-content">
+            <h2 class="overlay-title">Paused</h2>
+            <p class="overlay-message">Press SPACE to resume</p>
+            <button id="resumeBtn" class="btn btn-primary">Resume</button>
+          </div>
         </div>
+      </div>
+
+      <div class="game-controls">
+        <div class="controls-info">
+          <p><strong>Desktop:</strong> Arrow keys to move, SPACE to pause</p>
+          <p><strong>Mobile:</strong> Touch controls below</p>
+        </div>
+
+        <div class="mobile-controls">
+          <button id="leftBtn" class="control-btn">⬅️</button>
+          <button id="pauseBtn" class="control-btn">⏸️</button>
+          <button id="rightBtn" class="control-btn">➡️</button>
+        </div>
+      </div>
     </div>
 
-    <script src="game.js"></script>
-    <script>
-        // PWA Installation
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-        const installContainer = document.getElementById('installContainer');
+    <div id="installContainer" class="install-container hidden">
+      <button id="installBtn" class="btn btn-install">📱 Install App</button>
+    </div>
+  </div>
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installContainer.classList.remove('hidden');
-        });
+  <!-- Game Script -->
+  <script src="game.js"></script>
+  <script>
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    const installContainer = document.getElementById('installContainer');
 
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installContainer.classList.add('hidden');
-                }
-                deferredPrompt = null;
-            }
-        });
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installContainer.classList.remove('hidden');
+    });
 
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installContainer.classList.add('hidden');
         }
+        deferredPrompt = null;
+      }
+    });
 
-        // Initialize game when page loads
-        window.addEventListener('load', () => {
-            if (typeof Game !== 'undefined') {
-                new Game();
-            }
-        });
-    </script>
-
-<div id="give-freely-root-ejkiikneibegknkgimmihdpcbcedgmpo" class="give-freely-root" data-extension-id="ejkiikneibegknkgimmihdpcbcedgmpo" data-extension-name="Volume Booster" style="display: block;"><template shadowrootmode="open"><style>
-  :host {
-    all: initial;
-  }
-
-  .gf-scroll-remove::-webkit-scrollbar {
-    border-radius-bottom-right: 15px;
-  }
-
-  button {
-    cursor: pointer;
-    transition: transform 0.1s ease;
-  }
-
-  button:active {
-    transform: scale(0.98);
-  }
-
-  .give-freely-close-button:hover {
-    opacity: 0.7;
-  }
-
-  input[type="radio"] {
-    margin-right: 8px;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid #e5e5e5;
-    margin: 1em 0;
-  }
-
-  @media (max-width: 600px), (max-height: 480px) {
-    #give-freely-checkout-popup {
-      display: none !important;
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(error => {
+            console.log('SW registration failed: ', error);
+          });
+      });
     }
-  }
-</style><div><div class="gf-app"></div></div></template></div></body></html>
+
+    window.addEventListener('load', () => {
+      if (typeof Game !== 'undefined') {
+        new Game();
+      }
+    });
+  </script>
+</body>
+</html>
