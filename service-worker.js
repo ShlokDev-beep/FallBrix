@@ -1,12 +1,12 @@
 const CACHE_NAME = 'fallbrix-cache-v1';
 const FILES_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/game.js',
-  '/manifest.json',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+  '/FallBrix/',
+  '/FallBrix/index.html',
+  '/FallBrix/styles.css',
+  '/FallBrix/game.js',
+  '/FallBrix/manifest.json',
+  '/FallBrix/icon-192x192.png',
+  '/FallBrix/icon-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
