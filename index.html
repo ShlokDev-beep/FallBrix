@@ -7,12 +7,12 @@
   <meta name="description" content="A challenging 2D survival game where you dodge falling bricks" />
   <meta name="theme-color" content="#3B82F6" />
 
-  <!-- PWA Meta -->
-  <link rel="manifest" href="manifest.json" />
+  <!-- PWA -->
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Falling Bricks" />
-  <link rel="apple-touch-icon" sizes="192x192" href="icon-192x192.png" />
-  <link rel="icon" type="image/png" href="icon-192x192.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192x192.png" />
+  <link rel="icon" href="icon-192x192.png" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css" />
@@ -40,9 +40,7 @@
         <div id="gameOverlay" class="game-overlay">
           <div class="overlay-content">
             <h2 id="overlayTitle" class="overlay-title">Falling Bricks</h2>
-            <p id="overlayMessage" class="overlay-message">
-              Dodge the falling bricks and survive as long as possible!
-            </p>
+            <p id="overlayMessage" class="overlay-message">Dodge the falling bricks and survive as long as possible!</p>
             <div class="overlay-buttons">
               <button id="startBtn" class="btn btn-primary">Start Game</button>
               <button id="restartBtn" class="btn btn-secondary hidden">Restart</button>
@@ -80,6 +78,8 @@
 
   <!-- Game Script -->
   <script src="game.js"></script>
+
+  <!-- Install and PWA Handling -->
   <script>
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
@@ -102,18 +102,16 @@
       }
     });
 
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
-          .then(registration => {
-            console.log('SW registered: ', registration);
-          })
-          .catch(error => {
-            console.log('SW registration failed: ', error);
-          });
+          .then(reg => console.log('SW registered: ', reg))
+          .catch(err => console.log('SW registration failed: ', err));
       });
     }
 
+    // Start the game
     window.addEventListener('load', () => {
       if (typeof Game !== 'undefined') {
         new Game();
