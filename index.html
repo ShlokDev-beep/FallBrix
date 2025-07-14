@@ -2,40 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>FallBrix</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background: #1e3a8a;
-      touch-action: none;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Falling Bricks - Survival Game</title>
+  <meta name="description" content="A challenging 2D survival game where you dodge falling bricks" />
+  <meta name="theme-color" content="#3B82F6" />
 
-    canvas {
-      display: block;
-      margin: 0 auto;
-      background: #1e3a8a;
-      width: 100vw;
-      height: 100vh;
-    }
-  </style>
+  <!-- PWA -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Falling Bricks" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192x192.png" />
+  <link rel="icon" href="icon-192x192.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <canvas id="gameCanvas" width="360" height="640"></canvas>
+  <div id="app">
+    <div id="gameContainer" class="game-container">
+      <header class="game-header">
+        <h1 class="game-title">Falling Bricks</h1>
+        <div class="score-container">
+          <div class="score-item">
+            <span class="score-label">Score:</span>
+            <span id="currentScore" class="score-value">0</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">Best:</span>
+            <span id="highScore" class="score-value">0</span>
+          </div>
+        </div>
+      </header>
 
+      <div class="canvas-container">
+        <canvas id="gameCanvas" width="360" height="640"></canvas>
+
+        <div id="gameOverlay" class="game-overlay">
+          <div class="overlay-content">
+            <h2 id="overlayTitle" class="overlay-title">Falling Bricks</h2>
+            <p id="overlayMessage" class="overlay-message">Dodge the falling bricks and survive as long as possible!</p>
+            <div class="overlay-buttons">
+              <button id="startBtn" class="btn btn-primary">Start Game</button>
+              <button id="restartBtn" class="btn btn-secondary hidden">Restart</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="pauseOverlay" class="game-overlay hidden">
+          <div class="overlay-content">
+            <h2 class="overlay-title">Paused</h2>
+            <p class="overlay-message">Press SPACE to resume</p>
+            <button id="resumeBtn" class="btn btn-primary">Resume</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <div class="controls-info">
+          <p><strong>Desktop:</strong> Arrow keys (or A/D) to move, SPACE to pause</p>
+          <p><strong>Mobile:</strong> Touch and drag the blue block to move</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="installContainer" class="install-container hidden">
+      <button id="installBtn" class="btn btn-install">📱 Install App</button>
+    </div>
+  </div>
+
+  <!-- Game Script -->
   <script src="game.js"></script>
+
+  <!-- Install and PWA Handling -->
   <script>
-    // Optional: lock to portrait mode on supported browsers
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock("portrait").catch(() => {});
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    const installContainer = document.getElementById('installContainer');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installContainer.classList.remove('hidden');
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installContainer.classList.add('hidden');
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('SW registered: ', reg))
+          .catch(err => console.log('SW registration failed: ', err));
+      });
     }
 
-    // Start game
+    // Start the game
     window.addEventListener('load', () => {
-      if (typeof Game !== 'undefined') new Game();
+      if (typeof Game !== 'undefined') {
+        new Game();
+      }
     });
   </script>
 </body>
