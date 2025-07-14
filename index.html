@@ -2,20 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Falling Bricks - Survival Game</title>
   <meta name="description" content="A challenging 2D survival game where you dodge falling bricks" />
   <meta name="theme-color" content="#3B82F6" />
-
-  <!-- PWA -->
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Falling Bricks" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192x192.png" />
   <link rel="icon" href="icon-192x192.png" />
-
-  <!-- Styles -->
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #1e3a8a;
+      overflow: hidden;
+    }
+    canvas {
+      width: 100vw;
+      height: auto;
+      max-height: 100vh;
+      display: block;
+      margin: 0 auto;
+      background: #1e3a8a;
+    }
+    .game-overlay {
+      pointer-events: none;
+    }
+    .game-overlay .overlay-content {
+      pointer-events: auto;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
@@ -74,10 +93,7 @@
     </div>
   </div>
 
-  <!-- Game Script -->
   <script src="game.js"></script>
-
-  <!-- Install and PWA Handling -->
   <script>
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
@@ -100,7 +116,6 @@
       }
     });
 
-    // Register Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
@@ -109,7 +124,6 @@
       });
     }
 
-    // Start the game
     window.addEventListener('load', () => {
       if (typeof Game !== 'undefined') {
         new Game();
